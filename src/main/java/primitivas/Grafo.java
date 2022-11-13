@@ -4,6 +4,8 @@
  */
 package primitivas;
 
+import java.util.Random;
+
 /**
  *
  * @author luisa
@@ -23,7 +25,7 @@ public class Grafo {
         this.numColumnas = n;
         this.maxVertices = m * n;
         this.arregloVertices = new Lista[m * n];
-        this.verticesBorde = new int[m * n - (m - 2) * (n - 2) - 4];
+        this.verticesBorde = new int[m * n - (m - 2) * (n - 2)];
 
         this.determinarNodosBorde();
     }
@@ -85,16 +87,12 @@ public class Grafo {
             } else if (i > (this.getNumFilas() - 1) * this.getNumColumnas()) {
                 this.verticesBorde[aux] = i;
                 aux++;
-            } else if (i > this.getNumColumnas()) {
-                for (int j = 0; i < this.getNumFilas(); i++) {
-                    if (j == this.getNumColumnas() * i) {
+            } else if (i >= this.getNumColumnas()) {
+                for (int j = 0; j < this.getNumFilas(); j++) {
+                    if (i == this.getNumColumnas() * j) {
                         this.verticesBorde[aux] = i;
                         aux++;
-                    }
-                }
-            } else {
-                for (int j = 0; j < this.getNumFilas(); j++) {
-                    if (j == (j + 1) * this.getNumColumnas() - 1) {
+                    } else if (i == ((j + 1) * this.getNumColumnas()) - 1) {
                         this.verticesBorde[aux] = i;
                         aux++;
                     }
@@ -188,6 +186,54 @@ public class Grafo {
                 }
             }
         }
+
+    }
+
+    public Grafo arbolExpansionPrim() {
+        int nodoVisitado;
+        int proximoNodoRand;
+        Grafo grafoLaberinto = this;
+        Lista nodosNoVisitados = new Lista();
+        Random rand = new Random();
+        int seleccionVisitados;
+        int nodoAnterior;
+        int nodoNuevo;
+        
+        for (int i = 0; i < grafoLaberinto.getCantidadVert(); i++) {
+            nodosNoVisitados.agregarAlFinal(i);
+        }
+
+        // Selecciona un nodo aleatorio que este en el borde
+        proximoNodoRand = rand.nextInt(grafoLaberinto.getVerticesBorde().length);
+        nodoVisitado = grafoLaberinto.getVerticesBorde()[proximoNodoRand];
+
+        // Guarda el primer nodo, que es la entrada, en la posicion 0 del arreglo
+        nodosNoVisitados.eliminar(nodoVisitado);
+        
+        nodoAnterior = nodoVisitado;
+
+        for (int i = 0; i < grafoLaberinto.getCantidadVert(); i++) {
+
+            // Selecciona aleatoriamente la posicion del siguiente nodo adyacente a nodoVisitado en la lista de adyacencia de nodoVisitado
+            proximoNodoRand = rand.nextInt(grafoLaberinto.getArregloVertices()[nodoVisitado].getLongitud());
+
+            // Luego, determina cual es la posicion del nodo adyacente a nodoVisitado seleccionado en el grafo.
+            // El nodo adyacente anteriormente seleccionado pasa a ser nodoVisitado
+            nodoVisitado = grafoLaberinto.getArregloVertices()[nodoVisitado].buscarPorPosicion(proximoNodoRand);
+            nodoNuevo = nodoVisitado;
+
+            // Despues, guarda en la siguiente posicion el ID del nodo en el arreglo de los visitados
+            nodosNoVisitados.eliminar(nodoVisitado);
+            grafoLaberinto.insertarArista(nodoAnterior, nodoNuevo);
+
+            // Determina aleatoriamente el nuevo nodo nodoVisitado de la lista del arreglo de visitados
+            seleccionVisitados = rand.nextInt(nodosNoVisitados.getLongitud());
+            nodoVisitado = nodosNoVisitados.buscarPorPosicion(seleccionVisitados);
+            
+            nodoAnterior = nodoVisitado;
+        }
+
+        return grafoLaberinto;
 
     }
 

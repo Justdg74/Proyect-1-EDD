@@ -13,7 +13,7 @@ public class Nodo<T> {
     private Nodo nodoSiguiente;
     private static int id = -1;
     
-    public Nodo(int dato) {
+    public Nodo(T dato) {
         this.nodoSiguiente = null;
         id++;
     }

@@ -8,7 +8,7 @@ package primitivas;
  *
  * @author luisa
  */
-public class Lista {
+public class Lista<T> {
 
     private Nodo nodoPrimero;
     private int longitud;
@@ -55,7 +55,7 @@ public class Lista {
         this.setLongitud(0);
     }
 
-    public void agregarAlFinal(int dato) {
+    public void agregarAlFinal(T dato) {
         Nodo nuevoNodo = new Nodo(dato);
         if (this.esVacia()) {
             this.setNodoPrimero(nuevoNodo);
@@ -116,7 +116,7 @@ public class Lista {
         }
     }
 
-    public int buscarPorPosicionAdy(int posListaAdya) {
+    public int buscarPorPosicion(int posListaAdya) {
         Nodo nodoAux = this.getNodoPrimero();
         int aux = 0;
         while (aux != posListaAdya) {
@@ -125,4 +125,5 @@ public class Lista {
         }
         return nodoAux.getId();
     }
+    
 }
