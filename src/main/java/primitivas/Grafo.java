@@ -28,6 +28,7 @@ public class Grafo {
         this.verticesBorde = new int[m * n - (m - 2) * (n - 2)];
 
         this.determinarNodosBorde();
+        this.insertarVertice(this.getNumFilas() * this.getNumColumnas());
     }
 
     public void insertarArista(int i, int j) {
@@ -102,8 +103,6 @@ public class Grafo {
     }
 
     public void InicializarGrafo() {
-
-        this.insertarVertice(this.getMaxVertices() * this.getMaxVertices());
 
         //Aristas de las cuatros esquinas del laberinto//
         this.insertarArista(0, 1);
@@ -192,10 +191,10 @@ public class Grafo {
     public Grafo arbolExpansionPrim() {
         int nodoVisitado;
         int proximoNodoRand;
-        Grafo grafoLaberinto = this;
+        Grafo grafoLaberinto = new Grafo(this.getNumFilas(), this.getNumColumnas());
         Lista nodosNoVisitados = new Lista();
         Random rand = new Random();
-        int seleccionVisitados;
+        int seleccionNoVisitados;
         int nodoAnterior;
         int nodoNuevo;
         
@@ -227,8 +226,8 @@ public class Grafo {
             grafoLaberinto.insertarArista(nodoAnterior, nodoNuevo);
 
             // Determina aleatoriamente el nuevo nodo nodoVisitado de la lista del arreglo de visitados
-            seleccionVisitados = rand.nextInt(nodosNoVisitados.getLongitud());
-            nodoVisitado = nodosNoVisitados.buscarPorPosicion(seleccionVisitados);
+            seleccionNoVisitados = rand.nextInt(nodosNoVisitados.getLongitud());
+            nodoVisitado = nodosNoVisitados.buscarPorPosicion(seleccionNoVisitados);
             
             nodoAnterior = nodoVisitado;
         }
